@@ -14,12 +14,19 @@
       options = $.extend(defaults, options);
 
       return this.each(function () {
-        var input = $(this).addClass(options.placeholderClass);
+        var input = $(this);
         var form  = input.parents('form:first');
-        var text  = input.val() || input.attr('placeholder');
+        var phText = input.attr('placeholder');
+        var text  = input.val() || phText;
 
-        if (text) {
-          input.val(text);
+        if (phText === text) {
+          input.addClass(options.placeholderClass);
+        }
+
+        if (phText) {
+          if (phText !== text) {
+            input.val(text);
+          }
 
           input.focus(function () {
             clearInput();
@@ -37,7 +44,7 @@
         }
 
         function clearInput() {
-          if (input.val() === text) {
+          if (input.val() === phText) {
             input.val('');
           }
 
@@ -46,7 +53,7 @@
 
         function unclearInput() {
           if (input.val() === '') {
-            input.addClass(options.placeholderClass).val(text);
+            input.addClass(options.placeholderClass).val(phText);
           }
         }
       });
